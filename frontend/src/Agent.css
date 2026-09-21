@@ -1,0 +1,761 @@
+/* Additions for the multi-source dashboard, ATS scoring and apply flow. */
+
+/* ------------------------------- navigation ------------------------------- */
+.tabs {
+  display: flex;
+  gap: 4px;
+  background: #eef2f7;
+  padding: 4px;
+  border-radius: 11px;
+}
+.tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 0;
+  background: transparent;
+  padding: 8px 15px;
+  border-radius: 8px;
+  font: inherit;
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: #51637a;
+  cursor: pointer;
+}
+.tab:hover { color: #1c2b3f; }
+.tab.active {
+  background: #fff;
+  color: #10233c;
+  box-shadow: 0 1px 3px rgba(16, 35, 60, 0.14);
+}
+
+.spin { animation: spin 1s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* --------------------------------- alerts -------------------------------- */
+.warn-alert {
+  background: #fff8e6;
+  border: 1px solid #f2d999;
+  color: #7a5b12;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* --------------------------------- sources ------------------------------- */
+.add-source-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 12px 0 6px;
+}
+.add-source-row input,
+.add-source-row select {
+  flex: 1 1 220px;
+  min-width: 0;
+  padding: 9px 12px;
+  border: 1px solid #d3dbe6;
+  border-radius: 9px;
+  font: inherit;
+}
+.add-source-row .narrow { flex: 0 1 180px; }
+.add-source-row button { flex: 0 0 auto; }
+
+.signin-row { display: flex; gap: 8px; flex-wrap: wrap; margin: 10px 0; }
+
+.source-list { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
+.source-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 14px;
+  border: 1px solid #e3e9f1;
+  border-radius: 11px;
+  background: #fff;
+}
+.source-row.disabled { opacity: 0.55; }
+.source-main { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.source-meta { font-size: 0.78rem; color: #6b7c92; }
+.source-error { font-size: 0.78rem; color: #b3261e; }
+.source-actions { display: flex; gap: 6px; flex-shrink: 0; }
+.source-tag {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  background: #eef2f7;
+  color: #51637a;
+  padding: 3px 8px;
+  border-radius: 5px;
+  font-weight: 600;
+}
+
+/* -------------------------------- settings ------------------------------- */
+.settings-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 14px;
+  margin: 14px 0;
+}
+.settings-grid .wide { grid-column: 1 / -1; }
+.settings-grid label { display: flex; flex-direction: column; gap: 5px; font-size: 0.85rem; font-weight: 600; color: #33465e; }
+.settings-grid input,
+.settings-grid select {
+  padding: 9px 12px;
+  border: 1px solid #d3dbe6;
+  border-radius: 9px;
+  font: inherit;
+  font-weight: 400;
+}
+.settings-grid small { font-weight: 400; color: #6b7c92; }
+.label-row { display: flex; align-items: center; gap: 7px; }
+.ok-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-style: normal;
+  font-size: 0.74rem;
+  color: #1a7f47;
+  background: #e6f4ec;
+  padding: 2px 8px;
+  border-radius: 20px;
+}
+
+/* ------------------------------- job controls ---------------------------- */
+.job-controls { display: flex; gap: 8px; align-items: center; }
+.search-box {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  border: 1px solid #d3dbe6;
+  border-radius: 9px;
+  padding: 0 11px;
+  background: #fff;
+  color: #6b7c92;
+}
+.search-box input { border: 0; outline: 0; padding: 9px 0; font: inherit; min-width: 230px; }
+.job-controls select {
+  padding: 9px 12px;
+  border: 1px solid #d3dbe6;
+  border-radius: 9px;
+  font: inherit;
+}
+
+/* -------------------------------- ATS score ------------------------------ */
+.score-block { display: flex; gap: 22px; align-items: center; flex-wrap: wrap; margin-bottom: 16px; }
+.score-dial {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 108px;
+  height: 108px;
+  border-radius: 50%;
+  border: 5px solid;
+  flex-shrink: 0;
+}
+.score-dial strong { font-size: 2.1rem; line-height: 1; }
+.score-dial span { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 4px; }
+.score-great { border-color: #1a7f47; color: #1a7f47; background: #e6f4ec; }
+.score-good { border-color: #2f6fb5; color: #2f6fb5; background: #e9f1fa; }
+.score-fair { border-color: #b8860b; color: #b8860b; background: #fdf6e3; }
+.score-poor { border-color: #b3261e; color: #b3261e; background: #fdeceb; }
+
+.score-breakdown { flex: 1 1 300px; display: flex; flex-direction: column; gap: 7px; }
+.score-bar { display: grid; grid-template-columns: 165px 1fr 34px; align-items: center; gap: 10px; }
+.score-bar-label { font-size: 0.82rem; color: #33465e; font-weight: 600; }
+.score-bar-label em { font-style: normal; color: #93a1b4; font-weight: 400; }
+.score-track { height: 8px; background: #eef2f7; border-radius: 5px; overflow: hidden; }
+.score-fill { height: 100%; border-radius: 5px; }
+.score-fill.score-great { background: #1a7f47; }
+.score-fill.score-good { background: #2f6fb5; }
+.score-fill.score-fair { background: #d9a406; }
+.score-fill.score-poor { background: #b3261e; }
+.score-value { font-size: 0.84rem; font-weight: 700; text-align: right; color: #33465e; }
+
+/* --------------------------------- chips --------------------------------- */
+.chip-row { display: flex; flex-wrap: wrap; gap: 6px; margin: 9px 0; }
+.chip {
+  font-size: 0.78rem;
+  padding: 4px 10px;
+  border-radius: 20px;
+  background: #eef2f7;
+  color: #51637a;
+}
+.chip em { font-style: normal; opacity: 0.66; font-size: 0.72rem; }
+.chip-ok { background: #e6f4ec; color: #1a7f47; }
+.chip-required { background: #fdeceb; color: #b3261e; }
+.chip-preferred { background: #fdf6e3; color: #8a6a08; }
+.chip-nice_to_have { background: #eef2f7; color: #6b7c92; }
+.chip-added { background: #eaf1fb; color: #23548f; }
+.chip-remove {
+  border: 0;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+  font-size: 0.95rem;
+  line-height: 1;
+  margin-left: 5px;
+  padding: 0;
+  opacity: 0.55;
+}
+.chip-remove:hover { opacity: 1; }
+.adopted-skills { margin-top: 12px; }
+
+/* ------------------------ separate gates, not a blend -------------------- */
+.score-caveat { margin: -6px 0 14px; max-width: 68ch; }
+.score-bar-muted .score-bar-label { opacity: 0.5; }
+.gate-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; }
+.gate {
+  flex: 1 1 160px;
+  border: 1px solid #e2e8f0;
+  border-left-width: 4px;
+  border-radius: 8px;
+  padding: 9px 12px;
+  background: #fbfcfe;
+}
+.gate .gate-label {
+  display: block;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #7c8ca0;
+}
+.gate strong { font-size: 1.3rem; line-height: 1.3; }
+.gate small { display: block; font-size: 0.76rem; color: #5d6e84; }
+.gate.score-great { border-left-color: #1a7f47; }
+.gate.score-good { border-left-color: #2f6fb5; }
+.gate.score-fair { border-left-color: #d9a406; }
+.gate.score-poor { border-left-color: #b3261e; }
+
+.eligibility-list, .plain-list { margin: 8px 0 0; padding-left: 18px; }
+.eligibility-list li { margin-bottom: 5px; font-size: 0.85rem; }
+.eligibility-list strong { text-transform: capitalize; }
+.eligibility-list em { font-style: normal; color: #7c8ca0; }
+.eligibility-list li.eligibility-met::marker { color: #1a7f47; }
+.eligibility-list li.eligibility-unmet::marker { color: #b3261e; }
+.eligibility-list li.eligibility-unmet strong { color: #b3261e; }
+.eligibility-list li.eligibility-unknown::marker { color: #d9a406; }
+.plain-list li { margin-bottom: 4px; font-size: 0.85rem; color: #51637a; }
+
+/* ------------------------------- apply modal ----------------------------- */
+.generate-cta {
+  text-align: center;
+  padding: 34px 20px;
+  color: #51637a;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+.generate-cta h3 { margin: 0; color: #10233c; }
+.generate-cta p { max-width: 460px; margin: 0; line-height: 1.55; }
+.primary-button.large { padding: 12px 24px; font-size: 0.95rem; margin-top: 6px; }
+
+.summary-preview {
+  background: #f7f9fc;
+  border-left: 3px solid #2f6fb5;
+  padding: 10px 13px;
+  border-radius: 0 8px 8px 0;
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: #33465e;
+}
+
+.autofill-report {
+  margin-top: 12px;
+  padding: 12px 14px;
+  background: #f7f9fc;
+  border: 1px solid #e3e9f1;
+  border-radius: 10px;
+  font-size: 0.85rem;
+}
+.autofill-report ul { margin: 6px 0 0; padding-left: 20px; }
+.autofill-report li { margin: 3px 0; color: #51637a; }
+.autofill-report code {
+  background: #eef2f7;
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-size: 0.82em;
+}
+.autofill-report summary { cursor: pointer; font-weight: 600; color: #33465e; }
+
+.upload-inline { position: relative; overflow: hidden; cursor: pointer; }
+.upload-inline input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+
+.hint { font-size: 0.8rem; color: #6b7c92; margin: 6px 0; }
+
+@media (max-width: 900px) {
+  .topbar { flex-wrap: wrap; gap: 12px; }
+  .tabs { order: 3; width: 100%; }
+  .score-bar { grid-template-columns: 130px 1fr 30px; }
+  .search-box input { min-width: 140px; }
+}
+
+/* ---------------------- employer-specific drafted answers ------------------ */
+.draft-item {
+  margin: 12px 0;
+  padding: 11px 13px;
+  border: 1px solid #e3e9f1;
+  border-left: 3px solid #2f6fb5;
+  border-radius: 0 9px 9px 0;
+  background: #fbfcfe;
+}
+.draft-item.needs-you { border-left-color: #d9a406; background: #fffdf6; }
+.draft-item label { display: block; font-weight: 600; font-size: 0.88rem; color: #10233c; margin-bottom: 2px; }
+.draft-item small { display: block; color: #6b7c92; font-size: 0.78rem; margin-bottom: 6px; }
+.draft-item textarea {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #d3dbe6;
+  border-radius: 8px;
+  font: inherit;
+  font-size: 0.88rem;
+  resize: vertical;
+}
+.needs-chip {
+  margin-left: 8px;
+  font-style: normal;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #8a6a08;
+  background: #fdf6e3;
+  padding: 2px 8px;
+  border-radius: 20px;
+}
+.draft-item select {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #d3dbe6;
+  border-radius: 8px;
+  font: inherit;
+  font-size: 0.88rem;
+}
+.legal-chip { color: #b3261e; background: #fdeceb; }
+.check-label.wide { align-items: flex-start; gap: 9px; }
+.check-label.wide small { display: block; color: #6b7c92; font-weight: 400; margin-top: 3px; line-height: 1.45; }
+
+/* ============================ candidate profile =========================== */
+/* These classes were referenced by the profile form but never defined, which is
+   why it rendered as unstyled inline HTML. */
+
+.candidate-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 14px;
+  margin: 4px 0 16px;
+}
+.candidate-grid label,
+.profile-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #33465e;
+  min-width: 0;
+}
+.candidate-grid input,
+.candidate-grid select,
+.profile-field input,
+.profile-field textarea,
+.profile-field select {
+  padding: 9px 12px;
+  border: 1px solid #d3dbe6;
+  border-radius: 9px;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: #10233c;
+  background: #fff;
+  width: 100%;
+  box-sizing: border-box;
+}
+.candidate-grid input:focus,
+.candidate-grid select:focus,
+.profile-field input:focus,
+.profile-field textarea:focus {
+  outline: 2px solid #c8d7ec;
+  outline-offset: 1px;
+  border-color: #2f6fb5;
+}
+.profile-field textarea { resize: vertical; line-height: 1.5; }
+.profile-field small { font-weight: 400; color: #6b7c92; }
+
+.profile-form fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
+.profile-form > fieldset > .review-section { margin-top: 22px; }
+
+.history-entry {
+  border: 1px solid #e3e9f1;
+  border-left: 3px solid #2f6fb5;
+  border-radius: 0 11px 11px 0;
+  background: #fbfcfe;
+  padding: 15px 17px;
+  margin-bottom: 12px;
+}
+.history-entry .candidate-grid { margin-bottom: 10px; }
+.history-entry-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.history-entry-head span {
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #93a1b4;
+}
+
+.agent-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: 12px;
+}
+
+.count-chip {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #51637a;
+  background: #eef2f7;
+  padding: 5px 11px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+.sync-all-panel {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+.sync-all-panel h3 { margin: 0 0 2px; }
+.sync-all-panel .hint { margin: 0; }
+
+.section-note {
+  font-size: 0.82rem;
+  color: #6b7c92;
+  margin: 0 0 12px;
+  line-height: 1.5;
+}
+
+@media (max-width: 720px) {
+  .candidate-grid { grid-template-columns: 1fr; }
+}
+
+/* ========================= layout rhythm (global) ========================= */
+/* .panel carries padding on its heading only, so any body content added
+   straight into a panel sat flush against the border. These rules give every
+   panel a real body inset and put consistent vertical rhythm between cards. */
+
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.dashboard > .alert { margin: 0; }
+
+.panel > *:not(.panel-heading):not(.table-wrapper) {
+  padding-left: 23px;
+  padding-right: 23px;
+}
+.panel > *:first-child:not(.panel-heading) { padding-top: 20px; }
+.panel > *:last-child:not(.panel-heading) { padding-bottom: 20px; }
+.panel > .panel-heading + * { padding-top: 18px; }
+.panel > .table-wrapper { padding: 0; }
+
+.panel-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+.panel-heading > div { min-width: 0; }
+.panel-heading p { max-width: 78ch; line-height: 1.5; }
+
+/* An empty panel body should not be a cavern. */
+.panel .empty-state { padding: 30px 20px; }
+
+/* First and last elements inside a panel body should not double-space. */
+.panel .add-source-row:first-of-type { margin-top: 0; }
+.panel > .source-list { margin-top: 14px; }
+
+/* --------------------------- profile sections --------------------------- */
+.profile-form > fieldset > .review-section:first-child { margin-top: 0; }
+.review-section > h3 { margin: 0 0 4px; font-size: 15px; }
+.review-section > .section-note { margin: 0 0 14px; }
+.profile-field { margin-bottom: 16px; }
+.profile-field:last-child { margin-bottom: 0; }
+.candidate-grid:last-child { margin-bottom: 0; }
+
+/* ------------------------------- settings ------------------------------- */
+/* .settings-grid stacks its labels, which pushed each checkbox onto its own
+   line and stretched it to full width. Checkboxes need a row layout and an
+   intrinsic size. */
+.settings-grid .check-label {
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 14px;
+  border: 1px solid #e3e9f1;
+  border-radius: 10px;
+  background: #fbfcfe;
+  cursor: pointer;
+}
+.settings-grid .check-label input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  min-width: 16px;
+  margin: 2px 0 0;
+  padding: 0;
+  flex: 0 0 auto;
+  accent-color: #4338ca;
+  cursor: pointer;
+}
+.settings-grid .check-label > span { display: block; min-width: 0; }
+.settings-grid .agent-actions { margin-top: 0; }
+
+/* --------------------------------- modal -------------------------------- */
+.modal-content > .review-section:first-of-type { margin-top: 4px; }
+.review-warning ul { margin: 6px 0 0; padding-left: 20px; }
+
+/* ------------------------- spacing refinements -------------------------- */
+/* The heading text block must grow, or its paragraph wraps long before it
+   reaches the edge of the card. */
+.panel-heading > div:first-child { flex: 1 1 340px; }
+.panel-heading p { max-width: none; }
+
+/* Section headings need air between themselves and their fields. */
+.review-section > h3 { margin: 0 0 12px; }
+.review-section > h3 + .section-note { margin-top: -6px; }
+.profile-form > fieldset > .review-section { margin-top: 28px; }
+.profile-form > fieldset > .review-section:first-child { margin-top: 0; }
+
+/* Short status words should not break across lines. */
+.status, .no-action { white-space: nowrap; }
+td .cell-subtitle { margin-top: 2px; }
+
+/* Modal sections get the same rhythm as panels. */
+.review-section { margin-top: 22px; }
+.modal-content > .review-section:first-of-type { margin-top: 12px; }
+
+.how-it-works {
+  margin: 10px 0 0;
+  padding-left: 20px;
+  font-size: 0.84rem;
+  color: #51637a;
+  line-height: 1.6;
+}
+.how-it-works li { margin-bottom: 3px; }
+.how-it-works strong { color: #10233c; }
+
+/* ============================== resume library ============================ */
+.resume-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 14px;
+  margin-top: 14px;
+}
+.resume-card {
+  border: 1px solid #e3e9f1;
+  border-radius: 12px;
+  padding: 15px 16px;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+.resume-card-top { display: flex; align-items: flex-start; gap: 13px; }
+.resume-meta { display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1; }
+.resume-meta strong { font-size: 0.95rem; color: #10233c; }
+.resume-meta span { font-size: 0.8rem; color: #51637a; }
+.resume-meta .resume-sub { font-size: 0.75rem; color: #93a1b4; }
+
+.resume-score {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 54px;
+  height: 54px;
+  border-radius: 12px;
+  border: 2px solid;
+  font-size: 1.3rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.resume-score span {
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  opacity: 0.75;
+}
+.resume-score.small { width: 40px; height: 40px; font-size: 1rem; border-radius: 9px; }
+.score-none { border-color: #d3dbe6; color: #93a1b4; background: #f7f9fc; }
+
+.resume-actions { display: flex; gap: 7px; flex-wrap: wrap; margin-top: auto; }
+.resume-actions .table-button,
+.resume-actions .cancel-button { min-width: 0; }
+
+.icon-button.starred { color: #d9a406; }
+.icon-button.starred svg { fill: #f2d999; }
+
+.check-box {
+  border-top: 1px solid #eef2f7;
+  padding-top: 12px;
+  margin-top: 4px;
+}
+
+/* --------------------- picking a saved resume when applying --------------- */
+.library-picker {
+  margin-top: 12px;
+  padding: 13px 14px;
+  border: 1px solid #e3e9f1;
+  border-radius: 11px;
+  background: #fbfcfe;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.library-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 9px 11px;
+  border: 1px solid #e3e9f1;
+  border-radius: 9px;
+  background: #fff;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.library-option:hover:not(:disabled) { border-color: #2f6fb5; background: #f5f9ff; }
+.library-option:disabled { opacity: 0.6; cursor: default; }
+.library-option-main { display: flex; flex-direction: column; min-width: 0; }
+.library-option-main strong { font-size: 0.9rem; color: #10233c; }
+.library-option-main em { font-style: normal; font-size: 0.78rem; color: #6b7c92; }
+
+.or-divider {
+  margin: 14px 0 2px;
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #93a1b4;
+}
+.agent-actions.centred { justify-content: center; }
+.generate-cta .library-picker { text-align: left; width: 100%; max-width: 520px; }
+
+.list-footer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 14px 0 2px;
+}
+.list-footer .hint { margin: 0; flex: 1 1 auto; }
+
+.danger-zone {
+  border-top: 1px solid #eef2f7;
+  margin-top: 24px;
+  padding-top: 18px;
+}
+.danger-zone h3 { color: #b3261e; }
+.blocked-note { font-style: normal; opacity: 0.7; font-size: 0.9em; }
+
+/* --------------------------- posted-date column -------------------------- */
+.posted {
+  display: inline-block;
+  font-size: 0.82rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.posted-fresh { color: #1a7f47; }
+.posted-recent { color: #51637a; }
+.posted-old { color: #93a1b4; font-weight: 400; }
+.posted-unknown { color: #c3ccd9; font-weight: 400; }
+td .posted + .status { display: block; margin-top: 4px; }
+.settings-grid textarea {
+  padding: 9px 12px;
+  border: 1px solid #d3dbe6;
+  border-radius: 9px;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 400;
+  resize: vertical;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Month + year shown as one control pair. */
+.date-parts { display: flex; gap: 6px; }
+.date-parts select { flex: 0 0 92px; }
+.date-parts input { flex: 1 1 auto; min-width: 0; }
+.check-inline {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center;
+  gap: 7px;
+  margin-top: 6px;
+  font-weight: 400 !important;
+  font-size: 0.8rem;
+  color: #51637a;
+}
+.check-inline input[type="checkbox"] { width: 15px; height: 15px; flex: 0 0 auto; }
+
+/* Breathing room above the form's own save button. */
+.profile-form > fieldset > .primary-button { margin-top: 26px; }
+
+/* --------------------------- master resume ------------------------------- */
+.master-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 8px 0 0;
+  padding: 6px 10px;
+  border-radius: 7px;
+  background: #eaf1fb;
+  color: #23548f;
+  font-size: 0.78rem;
+  line-height: 1.35;
+}
+.master-button { margin-top: 8px; align-self: flex-start; }
+.master-banner {
+  display: flex;
+  gap: 9px;
+  align-items: flex-start;
+  padding: 10px 13px;
+  border-radius: 9px;
+  background: #eaf1fb;
+  color: #23548f;
+  font-size: 0.84rem;
+  margin-bottom: 14px;
+}
+.master-banner strong { display: block; }
+.edit-list { margin: 8px 0 0; padding-left: 0; list-style: none; }
+.edit-list li {
+  border-left: 3px solid #cfe0f5;
+  padding: 5px 0 5px 11px;
+  margin-bottom: 9px;
+  font-size: 0.83rem;
+}
+.edit-list .edit-reason { color: #6b7c92; display: block; margin-top: 2px; }
+
+/* ------------------ a posting that arrived without its text --------------- */
+.description-fix { display: block; }
+.description-fix strong { display: block; margin-bottom: 4px; }
+.description-fix .agent-actions { margin: 10px 0 8px; }
+.description-fix textarea {
+  width: 100%;
+  padding: 9px 11px;
+  border: 1px solid #e0cf9a;
+  border-radius: 8px;
+  font: inherit;
+  resize: vertical;
+}
+.description-fix .primary-button { margin-top: 8px; }

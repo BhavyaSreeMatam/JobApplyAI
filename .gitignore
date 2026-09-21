@@ -1,0 +1,46 @@
+# Python and JavaScript environments
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+node_modules/
+dist/
+coverage/
+
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+backend/settings.json
+backend/.settings-*.tmp
+
+# Candidate data, generated documents, and authenticated browser sessions
+backend/data/
+backend/exports/
+browser-profiles/
+backups/
+*.db
+*.db-*
+*.sqlite
+*.sqlite3
+*.pdf
+*.docx
+*.xlsx
+
+# Logs, downloaded archives, and local repair packages
+*.log
+*.zip
+*.rar
+/JobApplyAI$D/
+/JobApplyAI-Repair*/
+/JobApplyAI-Date-Repair*/
+/JobApplyAI-Diagnostics*/
+
+# Editor and operating-system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
